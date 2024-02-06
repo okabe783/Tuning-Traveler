@@ -3,7 +3,7 @@ using UnityEngine;
 public class CharactorMove : MonoBehaviour
 {
     private Animator animator;
-
+    //回転
     private Quaternion targetRotation;
 
     private void Awake()
@@ -17,9 +17,16 @@ public class CharactorMove : MonoBehaviour
     
     void Update()
     {
+        Move();
+    }
+
+    //Playerの動き
+    void Move()
+    {
         //入力ベクトルの取得
         var horizontal = Input.GetAxis("Horizontal");
         var vertical = Input.GetAxis("Vertical");
+        //カメラの方向に合わせて水平な回転を行い位置を合わせる
         var horizontalRotation = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up);
         var velo = horizontalRotation * new Vector3(horizontal, 0, vertical).normalized;
         
@@ -30,11 +37,12 @@ public class CharactorMove : MonoBehaviour
         //移動方向を向く
         if (velo.magnitude > 0.5f)
         {
-            transform.rotation = Quaternion.LookRotation(velo,Vector3.up);
+            targetRotation = Quaternion.LookRotation(velo,Vector3.up);
         }
-
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed);
+        
         //移動速度をAnimatorに反映
         animator.SetFloat("Speed",velo.magnitude * speed,0.1f,Time.deltaTime);
+        
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed);
     }
 }
