@@ -1,48 +1,81 @@
+using System.Collections;
 using UnityEngine;
 
+/// <summary> Playerの入力を他のscriptから受け取り管理するクラス</summary>
 public class CharactorMove : MonoBehaviour
 {
-    private Animator animator;
-    //回転
-    private Quaternion targetRotation;
+    //シングルトン化
+    public static CharactorMove Instance => _instance;
+
+    //Charactorクラス内でのみアクセス可能
+    protected static CharactorMove _instance;
+
+    //Playerに関するフィールド
+    [HideInInspector]
+    //Playerの入力を無視するかどうかの判定
+    public bool _playerInputIgnore;
+
+    //外部からの入力を無視するかの判定
+    protected bool _externalInputIgnore;
+
+    protected Vector2 _move;
+    protected Vector2 _camera;
+    protected bool _jump;
+    protected bool _attack;
+    protected bool _pause;
+
+    //外部からの入力が無効にされるかPlayerの入力を無効にされた時の処理
+    public Vector2 MoveIgnore =>
+        _playerInputIgnore || _externalInputIgnore ? Vector2.zero : _move;
+
+    public Vector2 CameraInput =>
+        _playerInputIgnore || _externalInputIgnore ? Vector2.zero : _camera;
+
+    public bool JumpInput => _jump && !_playerInputIgnore && !_externalInputIgnore;
+    public bool Attack => _attack && !_playerInputIgnore && !_externalInputIgnore;
+    public bool Pause => _pause;
+
+    private WaitForSeconds _attackInputWait;
+    private Coroutine _attackWaitCoroutine;
+    private const float _attackInputDuration = 0.03f;
 
     private void Awake()
     {
-        //コンポーネント関連付け
-        TryGetComponent(out animator);
-        
-        //初期化
-        targetRotation = transform.rotation;
-    }
-    
-    void Update()
-    {
-        Move();
+        _attackInputWait = new WaitForSeconds(_attackInputDuration);
+        //シングルトン化
+        if (_instance == null)
+            _instance = this;
+        else if (_instance != this)
+        {
+            throw new UnityException("複数のcharactorMovescriptを持つことはできません。インスタンスは次の通りです"
+                                     + _instance.name + "and" + name);
+        }
     }
 
-    //Playerの動き
-    void Move()
+    void Update()
     {
-        //入力ベクトルの取得
-        var horizontal = Input.GetAxis("Horizontal");
-        var vertical = Input.GetAxis("Vertical");
-        //カメラの方向に合わせて水平な回転を行い位置を合わせる
-        var horizontalRotation = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up);
-        var velo = horizontalRotation * new Vector3(horizontal, 0, vertical).normalized;
-        
-        //速度の取得
-        var speed = Input.GetKey(KeyCode.LeftShift) ? 2 : 1;
-        var rotationSpeed = 600 * Time.deltaTime;
-        
-        //移動方向を向く
-        if (velo.magnitude > 0.5f)
+        _move.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        _camera.Set(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        _jump = Input.GetButton("Jump");
+
+        if (Input.GetButtonDown("Fire1"))
         {
-            targetRotation = Quaternion.LookRotation(velo,Vector3.up);
+            if (_attackWaitCoroutine != null)
+            {
+                StopCoroutine(_attackWaitCoroutine);
+            }
+
+            _attackWaitCoroutine = StartCoroutine(AttackWait());
         }
-        
-        //移動速度をAnimatorに反映
-        animator.SetFloat("Speed",velo.magnitude * speed,0.1f,Time.deltaTime);
-        
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed);
+
+        _pause = Input.GetButtonDown("Pause");
+    }
+
+    /// <summary> 攻撃時のWait処理</summary>
+    IEnumerator AttackWait()
+    {
+        _attack = true;
+        yield return _attackInputWait;
+        _attack = false;
     }
 }
