@@ -19,7 +19,7 @@ namespace TuningTraveler
             public SoundBank[] _bank;
         }
         public MaterialOverrideSound[] _overrideSound;
-
+        
         [Serializable]
         public class SoundBank
         {
