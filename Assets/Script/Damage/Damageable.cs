@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,16 +14,19 @@ namespace TuningTraveler
 
         [Tooltip("オブジェクトが回転したらダメージを受ける範囲も回転")] [Range(0.0f, 360.0f)]
         public float _hitForwardRotation = 360.0f;
-        
+
         public int _maxHp;
+
         public int _currentHp { get; private set; } //現在のHP
+
         //死んだ、ダメージを受けた、無敵の間にダメージを受けた、無敵状態になった、ダメージをリセット
         public UnityEvent OnDeath, TakeDamage, OnHitWhileInvincible, OnBecomeInvincible, OnResetDamage;
-        
+
         protected float _lastHitTime; //最後に攻撃を受けてからの時間
         protected Collider _col;
 
-        
+        private System.Action _schedule;
+
 
         void Start()
         {
@@ -62,9 +66,55 @@ namespace TuningTraveler
             _col.enabled = isEnabled;
         }
 
-        public void ApplyDamage()
+        /// <summary>
+        /// すでに死んでいる場合はダメージを無視
+        /// </summary>
+        /// <param name="data"></param>
+        public void ApplyDamage(DamageMessage data)
         {
-            
+            if (_currentHp <= 0)
+            {
+                return;
+            }
+
+            if (_isInvincible)
+            {
+                OnHitWhileInvincible.Invoke();
+                return;
+            }
+
+            Vector3 forward = transform.forward;
+            // transform.upを中心に_hitForwardRotation度回転する
+            forward = Quaternion.AngleAxis(_hitForwardRotation, transform.up) * forward;
+
+            //ダメージを与える側から受ける側への方向
+            Vector3 _positionToDamage = data._damageSource - transform.position;
+            //上方向に平行な成分の除去、ダメージを与えた方向に対する反応を行うため
+            _positionToDamage -= transform.up * Vector3.Dot(transform.up, _positionToDamage);
+
+            if (Vector3.Angle(forward, _positionToDamage) > _hitAngle * 0.5)
+            {
+                return;
+            }
+
+            _isInvincible = true;
+            _currentHp -= data._amount;
+            //デリゲートactionに登録、競合の回避
+            //変更可能性?
+            _schedule += _currentHp <= 0 ? OnDeath.Invoke : (Action)TakeDamage.Invoke;
+        }
+
+        /// <summary>
+        /// 全てのUpdateが呼ばれた後に呼び出される
+        /// </summary>
+        private void LateUpdate()
+        {
+            if (_schedule != null)
+            {
+                //scheduleが参照するデリゲートを呼び出す。
+                _schedule();
+                _schedule = null;
+            }
         }
     }
 }
