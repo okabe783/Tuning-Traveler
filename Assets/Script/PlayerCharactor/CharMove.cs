@@ -4,11 +4,23 @@ namespace TuningTraveler
 {
     public class CharMove : MonoBehaviour
     {
-        protected Animator _animator;
+        private Animator _animator;
 
         //回転
-        protected Quaternion _targetRotation;
+        private Quaternion _targetRotation;
 
+        public bool _playerCtrlInputBlocked;
+        public Vector2 _move;
+
+        public Vector2 moveInput
+        {
+            get
+            {
+                if (_playerCtrlInputBlocked)
+                    return Vector2.zero;
+                return _move;
+            }
+        }
         private void Awake()
         {
             TryGetComponent(out _animator);
@@ -19,6 +31,7 @@ namespace TuningTraveler
         {
             var h = Input.GetAxis("Horizontal");
             var v = Input.GetAxis("Vertical");
+            _move.Set(h,v);
             //カメラの方向に合わせて水平な回転を行い位置を合わせる
             var horizontalRotation = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up);
             var velo = horizontalRotation * new Vector3(h, 0, v).normalized;

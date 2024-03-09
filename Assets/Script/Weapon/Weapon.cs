@@ -26,6 +26,7 @@ namespace TuningTraveler
         //両手で攻撃がしたいときそれぞれの手に対応する攻撃範囲が必要になるので
         //配列にすることで必要に応じて複数の攻撃範囲を追加、削除が可能
         public AttackPoint[] _attackPoints = new AttackPoint[0];
+        public TimeEffect[] _effects;
        
         //particle
         public ParticleSystem _particlePrefab;
@@ -36,6 +37,7 @@ namespace TuningTraveler
         private GameObject _owner;
         private Vector3[] _previousPos = null;
         private Vector3 _direction;
+        
         //Raycastのキャッシュを作成することでRaycastHitを新しく生成する必要がなくなる
         private static RaycastHit[] _raycastHitCahe = new RaycastHit[32];
         

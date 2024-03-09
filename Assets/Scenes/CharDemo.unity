@@ -786,7 +786,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   _attackPoints: []
-  _particlePrefab: {fileID: 0}
+  _particlePrefab: {fileID: 6767797208458767339, guid: aa443d27c48997a4888776a9ceeeb41c, type: 3}
 --- !u!114 &1216680960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -882,7 +882,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1706153789}
   m_LocalRotation: {x: 0.08967656, y: 0, z: 0, w: 0.99597096}
-  m_LocalPosition: {x: 0.28683013, y: 2.4696784, z: -5.0327396}
+  m_LocalPosition: {x: 0.3842544, y: 2.4696784, z: -5.0327396}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -967,7 +967,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7342759434380691496, guid: d18030e32930ad24a95b766373131be3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.28683013
+      value: 0.3842544
       objectReference: {fileID: 0}
     - target: {fileID: 7342759434380691496, guid: d18030e32930ad24a95b766373131be3, type: 3}
       propertyPath: m_LocalPosition.y
