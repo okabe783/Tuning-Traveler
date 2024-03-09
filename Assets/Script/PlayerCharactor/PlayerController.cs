@@ -35,6 +35,11 @@ namespace TuningTraveler
         public RandomAudioPlayer _landingPlayer;
         //パラメーター
         private readonly int _hashWeaponAttack = Animator.StringToHash("WeaponAttack");
+        //State
+        private readonly int _hashCombo1 = Animator.StringToHash("");
+        private readonly int _hashCombo2 = Animator.StringToHash("");
+        private readonly int _hashCombo3 = Animator.StringToHash("");
+        private readonly int _hashCombo4 = Animator.StringToHash("");
         //Tag
         private readonly int _hashBlockInput = Animator.StringToHash("BlockInput");
         public void SetCanAttack(bool canAttack)
@@ -93,6 +98,8 @@ namespace TuningTraveler
         private void FixedUpdate()
         {
             CacheAnimatorState();
+            UpdateInputBlocking();
+            EquipWeapon(IsWeaponEquip());
         }
 
         /// <summary>
@@ -115,6 +122,22 @@ namespace TuningTraveler
             _charMove._playerCtrlInputBlocked = inputBlocked;
         }
 
+        /// <summary>
+        /// Playerが武器を装備しているかどうかの判定
+        /// </summary>
+        /// <returns></returns>
+        private bool IsWeaponEquip()
+        {
+            bool equipped = _nextStateInfo.shortNameHash == _hashCombo1 ||
+                            _currentStateInfo.shortNameHash == _hashCombo1;
+            equipped |= _nextStateInfo.shortNameHash == _hashCombo2 ||
+                        _currentStateInfo.shortNameHash == _hashCombo2;
+            equipped |= _nextStateInfo.shortNameHash == _hashCombo3 ||
+                        _currentStateInfo.shortNameHash == _hashCombo3;
+            equipped |= _nextStateInfo.shortNameHash == _hashCombo4 ||
+                        _currentStateInfo.shortNameHash == _hashCombo4;
+            return equipped;
+        }
         /// <summary>
         /// 物理ステップごとに武器が装備されているかを確認し、それに応じた処理を実行
         /// </summary>
