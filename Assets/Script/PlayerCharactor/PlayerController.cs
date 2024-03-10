@@ -35,6 +35,7 @@ namespace TuningTraveler
         public RandomAudioPlayer _landingPlayer;
         //パラメーター
         private readonly int _hashWeaponAttack = Animator.StringToHash("WeaponAttack");
+        private readonly int _hashStateTime = Animator.StringToHash("");
         //State
         private readonly int _hashCombo1 = Animator.StringToHash("");
         private readonly int _hashCombo2 = Animator.StringToHash("");
@@ -100,6 +101,11 @@ namespace TuningTraveler
             CacheAnimatorState();
             UpdateInputBlocking();
             EquipWeapon(IsWeaponEquip());
+            //現在のアニメータの再生時間を0から1の範囲で取得し設定
+            _animator.SetFloat(_hashStateTime,
+                Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime,1f));
+            //トリガーをリセット
+            _animator.ResetTrigger(_hashWeaponAttack);
         }
 
         /// <summary>

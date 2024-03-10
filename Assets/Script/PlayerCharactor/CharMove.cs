@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace TuningTraveler
@@ -5,13 +6,12 @@ namespace TuningTraveler
     public class CharMove : MonoBehaviour
     {
         private Animator _animator;
-
         //回転
         private Quaternion _targetRotation;
 
         public bool _playerCtrlInputBlocked;
         public Vector2 _move;
-
+        private bool _attack;
         public Vector2 moveInput
         {
             get
@@ -21,8 +21,14 @@ namespace TuningTraveler
                 return _move;
             }
         }
+
+        public bool Attack => _attack && !_playerCtrlInputBlocked;
+        private WaitForSeconds _attackWait;
+        private Coroutine _attackCoroutine;
+        private const float _attackDuration = 0.03f;
         private void Awake()
         {
+            _attackWait = new WaitForSeconds(_attackDuration);
             TryGetComponent(out _animator);
             _targetRotation = transform.rotation;
         }
@@ -48,6 +54,22 @@ namespace TuningTraveler
             //移動速度をAnimatorに反映
             _animator.SetFloat("Speed", velo.magnitude * _speed, 0.1f, Time.deltaTime);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, _rotationSpeed);
+            if (Input.GetButtonDown("Fire1"))
+            {
+                if (_attackCoroutine != null)
+                {
+                    StopCoroutine(_attackCoroutine);
+
+                    _attackCoroutine = StartCoroutine(AttackWait());
+                }
+            }
+        }
+
+        IEnumerator AttackWait()
+        {
+            _attack = true;
+            yield return _attackWait;
+            _attack = false;
         }
     }
 }
