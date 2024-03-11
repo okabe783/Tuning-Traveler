@@ -11,6 +11,7 @@ namespace TuningTraveler
 
         public bool _playerCtrlInputBlocked;
         public Vector2 _move;
+        private bool _jump;
         private bool _attack;
         public Vector2 moveInput
         {
@@ -23,6 +24,7 @@ namespace TuningTraveler
         }
 
         public bool Attack => _attack && !_playerCtrlInputBlocked;
+        public bool JumpInput => _jump && !_playerCtrlInputBlocked;
         private WaitForSeconds _attackWait;
         private Coroutine _attackCoroutine;
         private const float _attackDuration = 0.03f;
@@ -54,6 +56,7 @@ namespace TuningTraveler
             //移動速度をAnimatorに反映
             _animator.SetFloat("Speed", velo.magnitude * _speed, 0.1f, Time.deltaTime);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, _rotationSpeed);
+            //  前の攻撃が終了していない場合はそれを中止し、新しい攻撃を呼び出す
             if (Input.GetButtonDown("Fire1"))
             {
                 if (_attackCoroutine != null)
