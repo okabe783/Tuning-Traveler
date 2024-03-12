@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 
 namespace TuningTraveler
@@ -20,6 +21,8 @@ namespace TuningTraveler
         public float _gravity = 20f;
         public float _jumpSpeed = 10f;
         public CameraSettings _cameraSettings;
+        public float _maxTurnSpeed = 1200f; //静止しているときの回転
+        public float _minTurnSpeed = 400f; //値が高いほど速く回転する
         private bool _inAttack; //攻撃中かどうか
         private bool _inCombo; //連続攻撃をしているかどうか
         
@@ -38,6 +41,10 @@ namespace TuningTraveler
         private bool _isGrounded = true; //現在地面に立っているか
         private bool _readyToJump; //jumpできる状態かどうか
         private float _verticalSpeed; //現在の上昇、下降の速さ
+        private float _forwardSpeed; //現在のspeed
+        private Collider[] _overlapResult = new Collider[8]; //playerに近いコライダーをキャッシュ(検出)するのに使用
+        private float _angleDiff; //playerの現在の回転と目標回転の間の角度（度）。
+        private Quaternion _targetRotation;
         //AudioSource
         public RandomAudioPlayer _footstepPlayer;
         public RandomAudioPlayer _hurtAudioPlayer;
@@ -47,18 +54,26 @@ namespace TuningTraveler
         private const float _groundAcceleration = 20f; //地上での加速
         private const float _groundDeceleration = 25f;　//地上での減速
         private const float _jumpAbortSpeed = 10f;
-        private float _forwardSpeed; //現在のspeed
+        private const float _minEnemyDot = 0.2f;
+        private const float _inverseOneEighty = 1f / 180f; //角度を正規化するときに使用
+        private const float _airborneTurnSpeedProportion = 5.4f; //地上での回転速度を基準にして空中での回転速度を調整する際に使用
+        
         //パラメーター
         private readonly int _hashWeaponAttack = Animator.StringToHash("WeaponAttack");
         private readonly int _hashStateTime = Animator.StringToHash("");
         private readonly int _hashForwardSpeed = Animator.StringToHash("");
+        private readonly int _hashAngleDeltaRad = Animator.StringToHash("");
         //State
         private readonly int _hashCombo1 = Animator.StringToHash("");
         private readonly int _hashCombo2 = Animator.StringToHash("");
         private readonly int _hashCombo3 = Animator.StringToHash("");
         private readonly int _hashCombo4 = Animator.StringToHash("");
+        private readonly int _hashAirborne = Animator.StringToHash("");
+        private readonly int _hashLocomotion = Animator.StringToHash("");
+        private readonly int _hashLanding = Animator.StringToHash("");
         //Tag
         private readonly int _hashBlockInput = Animator.StringToHash("BlockInput");
+        
         public void SetCanAttack(bool canAttack)
         
         {
@@ -131,6 +146,9 @@ namespace TuningTraveler
 
             CalculateForwardMovement();
             CalculateVerticalMovement();
+            SetTargetRotation();
+            if(IsOrientationUpdated() && IsMoveInput)
+                UpdateOrientation();
         }
 
         /// <summary>
@@ -244,7 +262,95 @@ namespace TuningTraveler
             // プレイヤーに移動入力、カメラの平坦化された前方方向、回転の3つの変数を作成する
             var moveInput = _charMove.moveInput;
             var localMovementDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+            var forward = Quaternion.Euler(0f, _cameraSettings.Current.m_XAxis.Value, 0f) * Vector3.forward;
+            forward.y = 0f;
+            forward.Normalize();
             
+            Quaternion targetRotation;
+            //後ろに向くときplayerの後ろ向きではなくカメラの方向に向ける
+            if (Mathf.Approximately(Vector3.Dot(localMovementDirection, Vector3.forward), -10f))
+            {
+                targetRotation = Quaternion.LookRotation(-forward);
+            }
+            else
+            {
+                Quaternion cameraToInputOffset = Quaternion.FromToRotation(Vector3.forward, localMovementDirection);
+                targetRotation = Quaternion.LookRotation(cameraToInputOffset * forward);
+            }
+
+            var resultingForward = targetRotation * Vector3.forward; //プレイヤーが向いている方向を示すベクトル
+            //攻撃する場合は、近い敵に照準を合わせるようにする。
+            if (_inAttack)
+            {
+                //ローカルエリア内の全ての敵を見つける
+                var centre = transform.position + transform.forward * 2.0f + transform.up;
+                var halfExtents = new Vector3(3.0f, 1.0f, 2.0f);
+                var layerMask = 1 << LayerMask.NameToLayer("");
+                var count = Physics.OverlapBoxNonAlloc(centre, halfExtents, 
+                    _overlapResult, targetRotation, layerMask);
+
+                var closestDot = 0.0f;
+                var closestForward = Vector3.zero;
+                var closest = -1;
+
+                for (var i = 0; i < count; i++)
+                {
+                    //playerからenemyへの方向ベクトルを計算
+                    var playerToEnemy = _overlapResult[i].transform.position - transform.position;
+                    playerToEnemy.y = 0;
+                    playerToEnemy.Normalize();
+                    // playerが進みたい方向とenemyへの方向の内積を計算。2つのベクトルがどれだけ同じ方向を向いているか
+                    var d = Vector3.Dot(resultingForward, playerToEnemy);
+                    // 一番近い敵のところに格納
+                    if (d > _minEnemyDot && d > closestDot)
+                    {
+                        closestForward = playerToEnemy;
+                        closestDot = d;
+                        closest = i;
+                    }
+                }
+                //もし近くに敵がいたら
+                if (closest != -1)
+                {
+                    //最も近い敵の方向をplayerの目標方向にする
+                    resultingForward = closestForward;
+                    // 戦闘中は向きの更新がUpdateOrientation関数で行われないため、回転を直接設定
+                    // 戦闘時には敵に対して素早く回転する必要があるため、向きを素早く調整するために直接回転を設定
+                    transform.rotation = Quaternion.LookRotation(resultingForward);
+                }
+            }
+            //プレイヤーの現在の回転と望ましい回転の間の角度の差を計算する
+            var angleCurrent = Mathf.Atan2(transform.forward.x, transform.forward.z) * Mathf.Rad2Deg;
+            var targetAngle = Mathf.Atan2(resultingForward.x, resultingForward.z) * Mathf.Rad2Deg;
+
+            _angleDiff = Mathf.DeltaAngle(angleCurrent, targetAngle);
+            _targetRotation = targetRotation;
+        }
+        //playerが回転できるかどうかを判定するために毎フレーム呼び出される
+        private bool IsOrientationUpdated()
+        {
+            var updateOrientationForLocomotion = _isAnimatorTransitioning && _currentStateInfo.shortNameHash
+                == _hashLocomotion || _nextStateInfo.shortNameHash == _hashLocomotion;
+            var updateOrientationForAirborne = _isAnimatorTransitioning && _currentStateInfo.shortNameHash
+                == _hashAirborne || _nextStateInfo.shortNameHash == _hashAirborne;
+            var updateOrientationForLanding = _isAnimatorTransitioning && _currentStateInfo.shortNameHash
+                == _hashLanding || _nextStateInfo.shortNameHash == _hashLanding;
+
+            return updateOrientationForLocomotion || updateOrientationForAirborne || updateOrientationForLanding
+                   || _inCombo && _inAttack;
+        }
+        // playerの向きを更新する
+        private void UpdateOrientation()
+        {
+            _animator.SetFloat(_hashAngleDeltaRad,_angleDiff * Mathf.Deg2Rad);
+            var localInput = new Vector3(_charMove.moveInput.x, 0f, _charMove.moveInput.y);
+            var groundedTurnSpeed = Mathf.Lerp(_maxTurnSpeed, _minTurnSpeed, _forwardSpeed / _desiredForwardSpeed);
+            var actualTurnSpeed = _isGrounded
+                ? groundedTurnSpeed : Vector3.Angle(transform.forward, localInput) * 
+                                      _inverseOneEighty * _airborneTurnSpeedProportion * groundedTurnSpeed;
+            _targetRotation = Quaternion.RotateTowards(transform.rotation,
+                _targetRotation, actualTurnSpeed * Time.deltaTime);
+            transform.rotation = _targetRotation;
         }
     }
 }
