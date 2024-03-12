@@ -19,6 +19,7 @@ namespace TuningTraveler
         public bool _canAttack; //攻撃判定
         public float _gravity = 20f;
         public float _jumpSpeed = 10f;
+        public CameraSettings _cameraSettings;
         private bool _inAttack; //攻撃中かどうか
         private bool _inCombo; //連続攻撃をしているかどうか
         
@@ -234,6 +235,16 @@ namespace TuningTraveler
                 //空中にいるときの重力
                 _verticalSpeed -= _gravity * Time.deltaTime;
             }
+        }
+        /// <summary>
+        /// 向きや回転を制御する
+        /// </summary>
+        private void SetTargetRotation()
+        {
+            // プレイヤーに移動入力、カメラの平坦化された前方方向、回転の3つの変数を作成する
+            var moveInput = _charMove.moveInput;
+            var localMovementDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+            
         }
     }
 }
