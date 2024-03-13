@@ -18,15 +18,20 @@ namespace TuningTraveler
             public Material[] _materials;
             public SoundBank[] _bank;
         }
+
         public MaterialOverrideSound[] _overrideSound;
-        
+
         [Serializable]
         public class SoundBank
         {
             public string _name;
             public AudioClip[] _clips;
-        }
-        public SoundBank _defaultBank = new SoundBank();
+        } 
+        //Editor上に表示させない
+        [HideInInspector] public bool _playing;
+        [HideInInspector] public bool _canPlay;
+
+    public SoundBank _defaultBank = new SoundBank();
         public AudioClip _clip { get; private set; } //外部から変更不可
 
         private AudioSource _audioSource;
