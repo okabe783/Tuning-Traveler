@@ -1,78 +1,65 @@
 using System.Collections;
 using UnityEngine;
 
-namespace TuningTraveler
-{
     public class CharMove : MonoBehaviour
     {
-        private Animator _animator;
-        //回転
-        private Quaternion _targetRotation;
-
-        public bool _playerCtrlInputBlocked;
-        public Vector2 _move;
+        public static CharMove Instance => _instance;
+        private static CharMove _instance;
+        
+        [HideInInspector] 
+        public bool _playerCtrlInputBlocked; //playerの入力を受け付けるかどうか
+        
+        private Vector2 _move;
+        private Vector2 _camera;
         private bool _jump;
         private bool _attack;
+        private bool _pause;
+        private bool _externalInputBlocked; //外部からの入力を無視するかの判定
         public Vector2 moveInput
         {
             get
             {
-                if (_playerCtrlInputBlocked)
+                if (_playerCtrlInputBlocked || _externalInputBlocked)
                     return Vector2.zero;
                 return _move;
             }
         }
 
-        public bool Attack => _attack && !_playerCtrlInputBlocked;
-        public bool JumpInput => _jump && !_playerCtrlInputBlocked;
-        private WaitForSeconds _attackWait;
-        private Coroutine _attackCoroutine;
+        public bool JumpInput => _jump && !_playerCtrlInputBlocked && _externalInputBlocked;
+        public bool Attack => _attack && !_playerCtrlInputBlocked && _externalInputBlocked;
+        public bool Pause => _pause;
+
+        private WaitForSeconds _attackInputWait;
+        private Coroutine _attackWaitCoroutine;
         private const float _attackDuration = 0.03f;
         private void Awake()
         {
-            _attackWait = new WaitForSeconds(_attackDuration);
-            TryGetComponent(out _animator);
-            _targetRotation = transform.rotation;
+            _attackInputWait = new WaitForSeconds(_attackDuration);
+            if (_instance == null)
+                _instance = this;
         }
 
         private void Update()
         {
-            var h = Input.GetAxis("Horizontal");
-            var v = Input.GetAxis("Vertical");
-            _move.Set(h,v);
-            //カメラの方向に合わせて水平な回転を行い位置を合わせる
-            var horizontalRotation = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up);
-            var velo = horizontalRotation * new Vector3(h, 0, v).normalized;
-            var _speed = Input.GetKey(KeyCode.LeftShift) ? 2 : 1;
-            var _rotationSpeed = 600 * Time.deltaTime;
-            //移動方向を向く
-            if (velo.magnitude > 0.5f)
-            {
-                transform.rotation = Quaternion.LookRotation(velo, Vector3.up);
-                _targetRotation = Quaternion.LookRotation(velo, Vector3.up);
-            }
+            _move.Set(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"));
+            _camera.Set(Input.GetAxis("Mouse X"),Input.GetAxis("Mouse Y"));
+            _jump = Input.GetButton("Jump");
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, _rotationSpeed);
-            //移動速度をAnimatorに反映
-            _animator.SetFloat("Speed", velo.magnitude * _speed, 0.1f, Time.deltaTime);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, _rotationSpeed);
-            //  前の攻撃が終了していない場合はそれを中止し、新しい攻撃を呼び出す
             if (Input.GetButtonDown("Fire1"))
             {
-                if (_attackCoroutine != null)
-                {
-                    StopCoroutine(_attackCoroutine);
+                if(_attackWaitCoroutine != null)
+                    StopCoroutine(_attackWaitCoroutine);
 
-                    _attackCoroutine = StartCoroutine(AttackWait());
-                }
+                _attackWaitCoroutine = StartCoroutine(AttackWait());
             }
+
+            _pause = Input.GetButtonDown("Pause");
         }
 
-        IEnumerator AttackWait()
+        private IEnumerator AttackWait()
         {
             _attack = true;
-            yield return _attackWait;
+            yield return _attackInputWait;
             _attack = false;
         }
     }
-}
