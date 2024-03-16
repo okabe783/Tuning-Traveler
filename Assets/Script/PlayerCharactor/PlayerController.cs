@@ -16,14 +16,13 @@ namespace TuningTraveler
         public bool _canAttack; //攻撃判定
         public float _gravity = 20f;
         public float _jumpSpeed = 10f;
-        public CameraSettings _cameraSettings;
         public float _maxTurnSpeed = 1200f; //静止しているときの回転
         public float _minTurnSpeed = 400f; //値が高いほど速く回転する
         public float _idleTimeout = 5f;
         private bool _inAttack; //攻撃中かどうか
         private bool _inCombo; //連続攻撃をしているかどうか
         private Material _currentWalkingSurface; //オーディオに関する決定を行うための参照
-        
+        public CameraSettings _cameraSettings;
         public Weapon _weapon;
         private Animator _animator;
         private CharacterController _charCtrl;
