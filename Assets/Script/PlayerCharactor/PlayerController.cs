@@ -48,6 +48,9 @@ namespace TuningTraveler
         public RandomAudioPlayer _footstepPlayer;
         public RandomAudioPlayer _hurtAudioPlayer;
         public RandomAudioPlayer _landingPlayer;
+        public RandomAudioPlayer _emoteLandingPlayer;
+        public RandomAudioPlayer _emoteDeathPlayer;
+        public RandomAudioPlayer _emoteAttackPlayer;
         public RandomAudioPlayer _emoteJumpPlayer;
 
         private const float _stickingGravityProportion = 0.3f; //地面に接しているときの重力
@@ -389,12 +392,17 @@ namespace TuningTraveler
                 _footstepPlayer._canPlay = true;　//条件を満たしていれば再生可能にする
             }
 
-            if (_isGrounded && _previouslyGrounded)
+            if (_isGrounded && !_previouslyGrounded)
             {
                 _landingPlayer.PlayRandomClip(_currentWalkingSurface, bankId: _forwardSpeed < 4 ? 0 : 1);
-                _emoteJumpPlayer.PlayRandomClip();　//着地音の再生
+                _emoteLandingPlayer.PlayRandomClip();　//着地音の再生
             }
 
+            if (_isGrounded && _previouslyGrounded && _verticalSpeed > 0f)
+            {
+                _emoteJumpPlayer.PlayRandomClip();
+            }
+            
             if (_currentStateInfo.shortNameHash == _hashHurt &&
                 _previousCurrentStateInfo.shortNameHash != _hashHurt)
             {
@@ -404,7 +412,7 @@ namespace TuningTraveler
             if (_currentStateInfo.shortNameHash == _hashDeath &&
                 _previousCurrentStateInfo.shortNameHash != _hashDeath)
             {
-                _emoteJumpPlayer.PlayRandomClip();　//死亡音を再生
+                _emoteDeathPlayer.PlayRandomClip();　//死亡音を再生
             }
 
             //combo中の特定の音を再生
@@ -417,7 +425,7 @@ namespace TuningTraveler
                 _currentStateInfo.shortNameHash == _hashCombo4 &&
                 _previousCurrentStateInfo.shortNameHash != _hashCombo4)
             {
-                _emoteJumpPlayer.PlayRandomClip();
+                _emoteAttackPlayer.PlayRandomClip();
             }
         }
 
