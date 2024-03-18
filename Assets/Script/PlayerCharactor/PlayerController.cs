@@ -175,7 +175,7 @@ namespace TuningTraveler
             _isAnimatorTransitioning = _animator.IsInTransition(0);
         }
         /// <summary>
-        /// //アニメーターの状態がキャッシュされた後に呼び出され、このスクリプトがユーザー入力をブロックすべきかどうかを決定する
+        /// アニメーターの状態がキャッシュされた後に呼び出され、このスクリプトがユーザー入力をブロックすべきかどうかを決定する
         /// </summary>
         private void UpdateInputBlocking()
         {

@@ -78,7 +78,7 @@ namespace TuningTraveler
             _clip = InternalPlayRandomClip(null, bankId: 0);
         }
 
-        AudioClip InternalPlayRandomClip(Material overrideMaterial, int bankId)
+        private AudioClip InternalPlayRandomClip(Material overrideMaterial, int bankId)
         {
             //配列宣言と初期化
             SoundBank[] banks = null;
