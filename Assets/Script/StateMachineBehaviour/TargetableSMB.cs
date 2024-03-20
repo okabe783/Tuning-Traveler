@@ -12,7 +12,7 @@ namespace TuningTraveler
             var controller = animator.GetComponent<PlayerController>();
             if (controller != null)
             {
-                controller
+                controller.RespawnFinished();
             }
         }
     }

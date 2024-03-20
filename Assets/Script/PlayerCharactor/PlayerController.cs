@@ -451,5 +451,14 @@ namespace TuningTraveler
             }
             _animator.SetBool(_hashInputDetected,inputDetected);
         }
+
+        /// <summary>
+        /// TargetableSMBで呼び出す
+        /// </summary>
+        public void RespawnFinished()
+        {
+            _respawning = false;
+            _damageable._isInvincible = false; //Respawn直後にDamageを受けないように無敵状態にする
+        }
     }
 }
