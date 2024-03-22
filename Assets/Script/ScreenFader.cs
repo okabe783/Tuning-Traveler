@@ -31,6 +31,9 @@ namespace TuningTraveler
         public static bool IsFading => Instance._isFading;
         private static ScreenFader _instance;
 
+        /// <summary>
+        /// screenFaderクラスの新しいinstanceを生成
+        /// </summary>
         private static void Create()
         {
             var ctrlPrefab = Resources.Load<ScreenFader>("");
@@ -40,9 +43,9 @@ namespace TuningTraveler
         public CanvasGroup _faderCanvasGroup;
         public CanvasGroup _loadingCanvasGroup;
         public CanvasGroup _gameOverCanvasGroup;
-        public float _fadeDuration = 1f;
+        public float _fadeDuration = 1f;　//fadeする時間
 
-        private bool _isFading;
+        private bool _isFading;　//fade中かどうか
         private const int _maxSortingLayer = 32767;
 
         private void Awake()
@@ -53,16 +56,25 @@ namespace TuningTraveler
                 return;
             }
 
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);　//objectが破棄されない
         }
 
+        /// <summary>
+        /// alpha値を変更してfadeInやfadeOutを行う
+        /// </summary>
+        /// <param name="finalAlpha"></param>
+        /// <param name="canvasGroup"></param>
+        /// <returns></returns>
         private IEnumerator Fade(float finalAlpha, CanvasGroup canvasGroup)
         {
             _isFading = true;
-            canvasGroup.blocksRaycasts = true;
+            canvasGroup.blocksRaycasts = true;　　//userの操作がcanvasGroupに影響を与えない
+            //現在のalpha値から目標のalpha値を引いてfadeする時間を割る
             var fadeSpeed = Mathf.Abs(canvasGroup.alpha - finalAlpha) / _fadeDuration;
+            
             while (!Mathf.Approximately(canvasGroup.alpha, finalAlpha))
             {
+                //目標のalpha値になるまで現在のalpha値を変化させる
                 canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, finalAlpha,
                     fadeSpeed * Time.deltaTime);
                 yield return null;

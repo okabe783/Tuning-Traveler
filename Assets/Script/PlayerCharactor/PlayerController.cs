@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace TuningTraveler
@@ -30,6 +31,7 @@ namespace TuningTraveler
         private Renderer[] _renderers;
         private bool _previouslyGrounded;
         private CharMove _charMove;
+        private CheckPoint _currentCheckPoint;
         //アニメータコントローラーの現在の状態や進行状況
         private AnimatorStateInfo _previousCurrentStateInfo;
         private AnimatorStateInfo _currentStateInfo;
@@ -71,6 +73,7 @@ namespace TuningTraveler
         private readonly int _hashDeath = Animator.StringToHash("");
         private readonly int _hashTimeoutToIdle = Animator.StringToHash("");
         private readonly int _hashInputDetected = Animator.StringToHash("");
+        private readonly int _hashRespawn = Animator.StringToHash("");
         //State
         private readonly int _hashCombo1 = Animator.StringToHash("");
         private readonly int _hashCombo2 = Animator.StringToHash("");
@@ -452,6 +455,43 @@ namespace TuningTraveler
             _animator.SetBool(_hashInputDetected,inputDetected);
         }
 
+        public void SetCheckPoint(CheckPoint checkPoint)
+        {
+            if (checkPoint != null)
+                _currentCheckPoint = checkPoint;
+        }
+        public void Respawn()
+        {
+            StartCoroutine(RespawnRoutine());
+        }
+
+        private IEnumerator RespawnRoutine()
+        {
+            //アニメーターがDeath状態から遷移するのを待つ
+            while (_currentStateInfo.shortNameHash != _hashDeath || _isAnimatorTransitioning)
+            {
+                yield return null;
+            }
+            //画面がフェードアウトするのを待つ
+            yield return StartCoroutine(ScreenFader.FadeSceneOut());
+            while (ScreenFader.IsFading)
+            {
+                yield return null;
+            }
+            
+            var spawn = GetComponentInChildren<PlayerSpawn>();
+            spawn.enabled = true;　 //spawn可能にする
+            //checkPointがあればそこに移動
+            if (_currentCheckPoint != null)
+            {
+                transform.position = _currentCheckPoint.transform.position;
+                transform.rotation = _currentCheckPoint.transform.rotation;
+            }
+            _animator.SetTrigger(_hashRespawn);
+            spawn.StartEffect();
+            yield return StartCoroutine(ScreenFader.FadeSceneIn());
+            _damageable.ResetDamage();
+        }
         /// <summary>
         /// TargetableSMBで呼び出す
         /// </summary>

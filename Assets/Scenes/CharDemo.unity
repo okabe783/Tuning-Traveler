@@ -1548,182 +1548,50 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnBecomeInvincible.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 1216680961, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
+      propertyPath: _landingPlayer
+      value: 
+      objectReference: {fileID: 2053312509}
+    - target: {fileID: 1216680961, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
+      propertyPath: _cameraSettings
+      value: 
+      objectReference: {fileID: 2011553392}
+    - target: {fileID: 1216680961, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
+      propertyPath: _footstepPlayer
+      value: 
+      objectReference: {fileID: 1759370392}
+    - target: {fileID: 1216680961, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
+      propertyPath: _emoteJumpPlayer
+      value: 
+      objectReference: {fileID: 559105228}
+    - target: {fileID: 1216680961, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
+      propertyPath: _hurtAudioPlayer
+      value: 
+      objectReference: {fileID: 1818123639}
+    - target: {fileID: 1216680961, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
+      propertyPath: _emoteDeathPlayer
+      value: 
+      objectReference: {fileID: 272746527}
+    - target: {fileID: 1216680961, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
+      propertyPath: _emoteAttackPlayer
+      value: 
+      objectReference: {fileID: 1621022390}
+    - target: {fileID: 1216680961, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
+      propertyPath: _emoteLandingPlayer
+      value: 
+      objectReference: {fileID: 1093494274}
     - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
       propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 7034298975658722774}
     - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
       propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 7034298975658722774}
     - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 1731069631}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeHpUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
       propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 7034298975658722774}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 1731069631}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeHpUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: SetActive
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnBecomeInvincible.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeHpUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: SetActive
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnBecomeInvincible.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1731069631}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnBecomeInvincible.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnBecomeInvincible.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TuningTraveler.HealthUI, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TuningTraveler.HealthUI, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
-      value: 
-      objectReference: {fileID: 1216680959}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TuningTraveler.HealthUI, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
-      value: 
-      objectReference: {fileID: 1216680959}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
-      value: 
-      objectReference: {fileID: 1216680959}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnBecomeInvincible.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: TuningTraveler.Damageable, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: TuningTraveler.Damageable, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: TakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: TuningTraveler.Damageable, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnResetDamage.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: OnBecomeInvincible.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 5179934808320393154, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.438
-      objectReference: {fileID: 0}
-    - target: {fileID: 5179934808320393154, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.038
-      objectReference: {fileID: 0}
     - target: {fileID: 5179934808992501856, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1772,57 +1640,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5179934809309820650, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: m_Name
-      value: HeadTarget
-      objectReference: {fileID: 0}
-    - target: {fileID: 5948379356172904883, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5948379356172904883, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5948379356172904883, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5948379356172904883, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.219
-      objectReference: {fileID: 0}
-    - target: {fileID: 5948379356172904883, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.007
-      objectReference: {fileID: 0}
-    - target: {fileID: 5948379356172904883, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.047
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
---- !u!1 &1216680955 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5179934808489196494, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-  m_PrefabInstance: {fileID: 1216680954}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1216680956 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5179934808320393154, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
   m_PrefabInstance: {fileID: 1216680954}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1216680957 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1216680957, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-  m_PrefabInstance: {fileID: 1216680954}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3e3d8d8abf608346a3c877b5ae4ae11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1216680958 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5179934808956937468, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
@@ -1833,40 +1657,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 838404650099251363, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
   m_PrefabInstance: {fileID: 1216680954}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1216680955}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96ef551e87e7d2640b690418506d8251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1216680961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1216680955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e32a2e344844bef4b991b54b64c5d858, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxForwardSpeed: 8
-  _canAttack: 1
-  _gravity: 20
-  _jumpSpeed: 10
-  _maxTurnSpeed: 1200
-  _minTurnSpeed: 400
-  _idleTimeout: 5
-  _cameraSettings: {fileID: 2011553392}
-  _weapon: {fileID: 1216680957}
-  _footstepPlayer: {fileID: 1759370392}
-  _hurtAudioPlayer: {fileID: 1818123639}
-  _landingPlayer: {fileID: 2053312509}
-  _emoteLandingPlayer: {fileID: 1093494274}
-  _emoteDeathPlayer: {fileID: 272746527}
-  _emoteAttackPlayer: {fileID: 1621022390}
-  _emoteJumpPlayer: {fileID: 559105228}
 --- !u!1 &1279521478
 GameObject:
   m_ObjectHideFlags: 3
@@ -2317,11 +2113,6 @@ Transform:
   m_Father: {fileID: 1698893878}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1691726718 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5179934808992501859, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-  m_PrefabInstance: {fileID: 1216680954}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1698893876
 GameObject:
   m_ObjectHideFlags: 0
@@ -2512,93 +2303,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c18757b2a312f7b4c96b26d4bd6866c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1731069631
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1731069633}
-  - component: {fileID: 1731069632}
-  m_Layer: 7
-  m_Name: Shield
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!137 &1731069632
-SkinnedMeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1731069631}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 0
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 3
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 84746990885141848ad8c8ca403082b2, type: 2}
-  - {fileID: 2100000, guid: 84746990885141848ad8c8ca403082b2, type: 2}
-  - {fileID: 2100000, guid: 84746990885141848ad8c8ca403082b2, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  serializedVersion: 2
-  m_Quality: 0
-  m_UpdateWhenOffscreen: 0
-  m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300026, guid: 8f0565f23a2b58541a475bd3c1393052, type: 3}
-  m_Bones: []
-  m_BlendShapeWeights: []
-  m_RootBone: {fileID: 2066123754}
-  m_AABB:
-    m_Center: {x: 0.00682, y: 0, z: -0.0092}
-    m_Extent: {x: 0.87855, y: 0.76564, z: 0.25213}
-  m_DirtyAABB: 0
---- !u!4 &1731069633
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1731069631}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1691726718}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1740188151
 GameObject:
   m_ObjectHideFlags: 0
@@ -3720,11 +3424,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!4 &2066123754 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5179934808615179747, guid: c136fa8d8e7d54f4c8fac03664cf2b92, type: 3}
-  m_PrefabInstance: {fileID: 1216680954}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2086745870
 GameObject:
   m_ObjectHideFlags: 3
