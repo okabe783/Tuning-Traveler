@@ -108,27 +108,30 @@ namespace TuningTraveler
         /// </summary>
         public void FixedUpdate()
         {
-            for (int i = 0; i < _attackPoints.Length; i++)
+            if (_inAttack)
             {
-                AttackPoint pts = _attackPoints[i];
-
-                Vector3 worldPos = pts._attackRoot.position + pts._attackRoot.TransformVector(pts._offset);
-                Vector3 attackVector = worldPos - _previousPos[i];
-
-                //攻撃ベクトルが非常に小さかった場合、計算上のerrorが起こる可能性があるので
-                //変わりの値を設定しておくことで計算の安定性を確保
-                if (attackVector.magnitude < 0.001f)
+                for (var i = 0; i < _attackPoints.Length; i++)
                 {
-                    attackVector = Vector3.forward * 0.0001f;
-                }
-                //Rayの発射点は攻撃範囲の発生点からattackVector方向に伸びるRay
-                var r = new Ray(worldPos, attackVector.normalized);
+                    var pts = _attackPoints[i];
 
-                //第１引数.Ray,2.球体の半径,3.衝突判定の格納先,4.キャストの最大距離、5.衝突を検出するレイヤーマスク
-                int contacts = Physics.SphereCastNonAlloc(r, pts._radius, _raycastHitCahe, attackVector.magnitude,
-                    ~0,
-                    //Trigger,Colliderの衝突を無視
-                    QueryTriggerInteraction.Ignore);
+                    var worldPos = pts._attackRoot.position + pts._attackRoot.TransformVector(pts._offset);
+                    var attackVector = worldPos - _previousPos[i];
+
+                    //攻撃ベクトルが非常に小さかった場合、計算上のerrorが起こる可能性があるので
+                    //変わりの値を設定しておくことで計算の安定性を確保
+                    if (attackVector.magnitude < 0.001f)
+                    {
+                        attackVector = Vector3.forward * 0.0001f;
+                    }
+                    //Rayの発射点は攻撃範囲の発生点からattackVector方向に伸びるRay
+                    var r = new Ray(worldPos, attackVector.normalized);
+
+                    //第１引数.Ray,2.球体の半径,3.衝突判定の格納先,4.キャストの最大距離、5.衝突を検出するレイヤーマスク
+                    var contacts = Physics.SphereCastNonAlloc(r, pts._radius, _raycastHitCahe, attackVector.magnitude,
+                        ~0,
+                        //Trigger,Colliderの衝突を無視
+                        QueryTriggerInteraction.Ignore);
+                }
             }
         }
 
@@ -141,7 +144,7 @@ namespace TuningTraveler
         private bool CheckDamage(Collider other,AttackPoint pts)
         {
             //ダメージを受けることのできるオブジェクトを検索するためにコライダーから検索
-            Damageable d = other.GetComponent<Damageable>();
+            var d = other.GetComponent<Damageable>();
 
             if (d == null)
             {

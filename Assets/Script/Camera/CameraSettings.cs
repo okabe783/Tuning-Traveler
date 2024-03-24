@@ -30,25 +30,52 @@ namespace TuningTraveler
 
         private void Reset()
         {
-            Transform keyboardAndMouseCameraTransform = transform.Find("");
+            var keyboardAndMouseCameraTransform = transform.Find("KeyboardAndMouseFreeLookRig");
             if (keyboardAndMouseCameraTransform != null)
                 _keyboardAndMouseCamera = keyboardAndMouseCameraTransform.GetComponent<CinemachineFreeLook>();
 
-            Transform controllerCameraTransform = transform.Find("");
+            var controllerCameraTransform = transform.Find("ControllerFreeLookRig");
             if (controllerCameraTransform != null)
                 _controllerCamera = controllerCameraTransform.GetComponent<CinemachineFreeLook>();
 
-            PlayerController playerController = FindObjectOfType<PlayerController>();
-            if (playerController != null && playerController.name == "")
+            var playerController = FindObjectOfType<PlayerController>();
+            if (playerController != null && playerController.name == "Player")
             {
                 _follow = playerController.transform;
-                _lookAt = _follow.Find("");
+                _lookAt = _follow.Find("HeadTarget");
 
-                if (playerController.GetComponent<Camera>())
-                {
-                    
-                }
+                if (playerController._cameraSettings == null)
+                    playerController._cameraSettings = this;
             }
+        }
+
+        private void Awake()
+        {
+            UpdateCameraSettings();
+        }
+
+        private void Update()
+        {
+            if (_allowRuntimeCameraSettingsChanges)
+            {
+                UpdateCameraSettings();
+            }
+        }
+
+        private void UpdateCameraSettings()
+        {
+            _keyboardAndMouseCamera.Follow = _follow;
+            _keyboardAndMouseCamera.LookAt = _lookAt;
+            _keyboardAndMouseCamera.m_XAxis.m_InvertInput = _keyboardAndMouseInvertSettings.invertX;
+            _keyboardAndMouseCamera.m_XAxis.m_InvertInput = _keyboardAndMouseInvertSettings.invertY;
+
+            _controllerCamera.m_XAxis.m_InvertInput = _controllerInvertSettings.invertX;
+            _controllerCamera.m_XAxis.m_InvertInput = _controllerInvertSettings.invertY;
+            _controllerCamera.Follow = _follow;
+            _controllerCamera.LookAt = _lookAt;
+
+            _keyboardAndMouseCamera.Priority = _inputChoice == InputChoice.KeyboardAndMouse ? 1 : 0;
+            _controllerCamera.Priority = _inputChoice == InputChoice.Controller ? 1 : 0;
         }
     }
 }

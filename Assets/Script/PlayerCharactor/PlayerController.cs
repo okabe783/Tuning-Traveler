@@ -65,23 +65,23 @@ namespace TuningTraveler
         
         //パラメーター
         private readonly int _hashWeaponAttack = Animator.StringToHash("WeaponAttack");
-        private readonly int _hashStateTime = Animator.StringToHash("");
-        private readonly int _hashForwardSpeed = Animator.StringToHash("");
-        private readonly int _hashAngleDeltaRad = Animator.StringToHash("");
+        private readonly int _hashStateTime = Animator.StringToHash("StateTime");
+        private readonly int _hashForwardSpeed = Animator.StringToHash("ForwardSpeed");
+        private readonly int _hashAngleDeltaRad = Animator.StringToHash("AngleDeltaRad");
         private readonly int _hashFootFall = Animator.StringToHash("");
-        private readonly int _hashHurt = Animator.StringToHash("");
-        private readonly int _hashDeath = Animator.StringToHash("");
-        private readonly int _hashTimeoutToIdle = Animator.StringToHash("");
+        private readonly int _hashHurt = Animator.StringToHash("Damage");
+        private readonly int _hashDeath = Animator.StringToHash("Death");
+        private readonly int _hashTimeoutToIdle = Animator.StringToHash("TimeoutToIdle");
         private readonly int _hashInputDetected = Animator.StringToHash("");
-        private readonly int _hashRespawn = Animator.StringToHash("");
+        private readonly int _hashRespawn = Animator.StringToHash("Respawn");
         //State
-        private readonly int _hashCombo1 = Animator.StringToHash("");
-        private readonly int _hashCombo2 = Animator.StringToHash("");
-        private readonly int _hashCombo3 = Animator.StringToHash("");
+        private readonly int _hashCombo1 = Animator.StringToHash("Combo1");
+        private readonly int _hashCombo2 = Animator.StringToHash("Combo2");
+        private readonly int _hashCombo3 = Animator.StringToHash("Combo3");
         private readonly int _hashCombo4 = Animator.StringToHash("");
-        private readonly int _hashAirborne = Animator.StringToHash("");
-        private readonly int _hashLocomotion = Animator.StringToHash("");
-        private readonly int _hashLanding = Animator.StringToHash("");
+        private readonly int _hashAirborne = Animator.StringToHash("Jumping");
+        private readonly int _hashLocomotion = Animator.StringToHash("Locomotion");
+        private readonly int _hashLanding = Animator.StringToHash("Landing");
         //Tag
         private readonly int _hashBlockInput = Animator.StringToHash("BlockInput");
         

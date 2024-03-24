@@ -5,10 +5,11 @@ namespace TuningTraveler
 {
     public class PlayerSpawn : MonoBehaviour
     {
-        private float _effectTime;
-        private GameObject _respawnParticles;
+        [HideInInspector]
+        public float _effectTime;
+        public Material[] _playerRespawnMaterials;
+        public GameObject _respawnParticles;
         private Material[] _playerMaterials;
-        private Material[] _playerRespawnMaterials;
         private MaterialPropertyBlock _propertyBlock; //複数のobjectのmaterialを効率的に設定
         private Renderer _renderer;
         private Vector4 _pos;
