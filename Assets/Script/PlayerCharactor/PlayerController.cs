@@ -97,18 +97,27 @@ namespace TuningTraveler
         {
             _weapon = GetComponent<Weapon>();
             //指定された名前の子を探す
-            var footStepSource = transform.Find("");
+            var footStepSource = transform.Find("FootstepSource");
             //見つかった場合は参照を取得する
             if (footStepSource != null)
                 _footstepPlayer = footStepSource.GetComponent<RandomAudioPlayer>();
             
-            var hurtSource = transform.Find("");
+            var hurtSource = transform.Find("HurtSource");
             if (hurtSource != null)
                 _hurtAudioPlayer = hurtSource.GetComponent<RandomAudioPlayer>();
             
-            var landingSource = transform.Find("");
+            var landingSource = transform.Find("LandingSource");
             if (landingSource != null)
                 _landingPlayer = landingSource.GetComponent<RandomAudioPlayer>();
+
+            _cameraSettings = FindObjectOfType<CameraSettings>();
+            if (_cameraSettings != null)
+            {
+                if (_cameraSettings._follow == null)
+                    _cameraSettings._follow = transform;
+                if (_cameraSettings._lookAt == null)
+                    _cameraSettings._follow = transform.Find("HeadTarget");
+            }
         }
 
         private void Awake()
@@ -124,6 +133,7 @@ namespace TuningTraveler
         /// </summary>
         private void OnEnable()
         {
+            SceneLinkedSMB<PlayerController>.Initialise(_animator,this);
             _damageable = GetComponent<Damageable>();
             _damageable._isInvincible = true;
             EquipWeapon(false);

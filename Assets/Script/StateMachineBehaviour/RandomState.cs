@@ -13,7 +13,7 @@ namespace TuningTraveler
         public float _maxNormTime = 5f;
         
         private float _randomNormTime;
-        private readonly int _hashRandomIdle = Animator.StringToHash("RandomIdle");
+        private readonly int _hashRandomIdle = Animator.StringToHash("RandomIdle"); 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo,int layerIndex)
         {
             _randomNormTime = Random.Range(_minNormTime, _maxNormTime);　//特定のアニメーションステートに入る際にランダムな時間を決定
