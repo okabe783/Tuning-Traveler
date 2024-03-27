@@ -8,35 +8,35 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Enemy
+  - 
   - Water
   - UI
-  - Cameras
+  - 
+  - 
+  - Skybox
   - Player
-  - Enviroment
+  - PostProssing
+  - SetDressing
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Vehicles
+  - Navmesh
+  - environment
+  - Charactor
+  - Vegetation
+  - Effects
+  - Ragdoll
+  - WaterGeometry
+  - Terrain
+  - Enemy
+  - Cameras
+  - Props
+  - Avoid
+  - CameraCollider
+  - Collider
+  - CheckPoint
+  - DoNotDraw
+  - Level
   m_SortingLayers:
   - name: Default
     uniqueID: 0

@@ -29,7 +29,7 @@ namespace TuningTraveler
         private CharacterController _charCtrl;
         private Damageable _damageable;
         private Renderer[] _renderers;
-        private bool _previouslyGrounded;
+        private bool _previouslyGrounded = true;
         private CharMove _charMove;
         private CheckPoint _currentCheckPoint;
         //アニメータコントローラーの現在の状態や進行状況
@@ -62,18 +62,21 @@ namespace TuningTraveler
         private const float _minEnemyDot = 0.2f;　//内積の一定の閾値
         private const float _inverseOneEighty = 1f / 180f; //角度を正規化するときに使用
         private const float _airborneTurnSpeedProportion = 5.4f; //地上での回転速度を基準にして空中での回転速度を調整する際に使用
+        private const float _groundedRayDistance = 10f;
         
         //パラメーター
         private readonly int _hashWeaponAttack = Animator.StringToHash("WeaponAttack");
         private readonly int _hashStateTime = Animator.StringToHash("StateTime");
         private readonly int _hashForwardSpeed = Animator.StringToHash("ForwardSpeed");
         private readonly int _hashAngleDeltaRad = Animator.StringToHash("AngleDeltaRad");
-        private readonly int _hashFootFall = Animator.StringToHash("");
+        private readonly int _hashFootFall = Animator.StringToHash("FootFall");
         private readonly int _hashHurt = Animator.StringToHash("Damage");
         private readonly int _hashDeath = Animator.StringToHash("Death");
         private readonly int _hashTimeoutToIdle = Animator.StringToHash("TimeoutToIdle");
-        private readonly int _hashInputDetected = Animator.StringToHash("");
+        private readonly int _hashInputDetected = Animator.StringToHash("InputDetected");
         private readonly int _hashRespawn = Animator.StringToHash("Respawn");
+        private readonly int _hashGrounded = Animator.StringToHash("Grounded");
+        private readonly int _hashAirborneVerticalSpeed = Animator.StringToHash("JumpingVerticalSpeed");
         //State
         private readonly int _hashCombo1 = Animator.StringToHash("Combo1");
         private readonly int _hashCombo2 = Animator.StringToHash("Combo2");
@@ -85,14 +88,10 @@ namespace TuningTraveler
         //Tag
         private readonly int _hashBlockInput = Animator.StringToHash("BlockInput");
         
-        /// <summary>
-        /// playerが移動入力を行っているか
-        /// </summary>
+        /// <summary>playerが移動入力を行っているか</summary>
         private bool IsMoveInput => !Mathf.Approximately(_charMove.moveInput.sqrMagnitude, 0f);
         
-        /// <summary>
-        /// scriptが初期化されるときに自動で呼び出される
-        /// </summary>
+        /// <summary>scriptが初期化されるときに自動で呼び出される</summary>
         private void Reset()
         {
             _weapon = GetComponent<Weapon>();
@@ -128,9 +127,7 @@ namespace TuningTraveler
             _weapon.SetOwner(gameObject);
             _instance = this;
         }
-        /// <summary>
-        /// scriptが有効になった時自動で呼び出される
-        /// </summary>
+        /// <summary>scriptが有効になった時自動で呼び出される</summary>
         private void OnEnable()
         {
             SceneLinkedSMB<PlayerController>.Initialise(_animator,this);
@@ -139,9 +136,7 @@ namespace TuningTraveler
             EquipWeapon(false);
             _renderers = GetComponentsInChildren<Renderer>();
         }
-        /// <summary>
-        /// scriptが無効になった時に自動で呼び出される
-        /// </summary>
+        /// <summary>scriptが無効になった時に自動で呼び出される</summary>
         private void OnDisable()
         {
             foreach (var t in _renderers)
@@ -150,9 +145,7 @@ namespace TuningTraveler
                 t.enabled = true;
             }
         }
-        /// <summary>
-        /// PhysicsステップごとにUnityから自動的に呼び出される
-        /// </summary>
+        /// <summary>PhysicsステップごとにUnityから自動的に呼び出される</summary>
         private void FixedUpdate()
         {
             CacheAnimatorState();
@@ -177,9 +170,7 @@ namespace TuningTraveler
             _previouslyGrounded = _isGrounded;
         }
 
-        /// <summary>
-        /// Animatorの状態をキャッシュする
-        /// </summary>
+        /// <summary>Animatorの状態をキャッシュする</summary>
         private void CacheAnimatorState()
         {
             _previousCurrentStateInfo = _currentStateInfo;
@@ -187,9 +178,7 @@ namespace TuningTraveler
             _nextStateInfo = _animator.GetNextAnimatorStateInfo(0);
             _isAnimatorTransitioning = _animator.IsInTransition(0);
         }
-        /// <summary>
-        /// アニメーターの状態がキャッシュされた後に呼び出され、このスクリプトがユーザー入力をブロックすべきかどうかを決定する
-        /// </summary>
+        /// <summary>Animatorの状態がキャッシュされた後に呼び出されこのスクリプトがユーザー入力をブロックすべきかどうかを決定</summary>
         private void UpdateInputBlocking()
         {
             var inputBlocked = _currentStateInfo.tagHash == _hashBlockInput && !_isAnimatorTransitioning;
@@ -197,10 +186,7 @@ namespace TuningTraveler
             _charMove._playerCtrlInputBlocked = inputBlocked;
         }
 
-        /// <summary>
-        /// Playerが武器のコンボを再生しているかどうか
-        /// </summary>
-        /// <returns></returns>
+        /// <summary>Playerが武器のコンボを再生しているかどうか</summary>
         private bool IsWeaponEquip()
         {
             var equipped = _nextStateInfo.shortNameHash == _hashCombo1 ||
@@ -209,14 +195,11 @@ namespace TuningTraveler
                         _currentStateInfo.shortNameHash == _hashCombo2;
             equipped |= _nextStateInfo.shortNameHash == _hashCombo3 ||
                         _currentStateInfo.shortNameHash == _hashCombo3;
-            equipped |= _nextStateInfo.shortNameHash == _hashCombo4 ||
-                        _currentStateInfo.shortNameHash == _hashCombo4;
+            // equipped |= _nextStateInfo.shortNameHash == _hashCombo4 ||
+            //             _currentStateInfo.shortNameHash == _hashCombo4;
             return equipped;
         }
-        /// <summary>
-        /// 武器の装備状態を制御
-        /// </summary>
-        /// <param name="equip"></param>
+        /// <summary>武器の装備状態を制御</summary>
         private void EquipWeapon(bool equip)
         {
             _weapon.gameObject.SetActive(equip);
@@ -224,13 +207,9 @@ namespace TuningTraveler
             _inCombo = equip;　
 
             if (!equip)
-            {
                 _animator.ResetTrigger(_hashWeaponAttack); //装備解除時にTriggerをreset
-            }
         }
-        /// <summary>
-        /// playerの前方向を計算しAnimationを制御するparamを設定
-        /// </summary>
+        /// <summary>playerの前方向を計算しAnimationを制御するparamを設定</summary>
         private void CalculateForwardMovement()
         {
             var moveInput = _charMove.moveInput; //移動入力をキャッシュし代入
@@ -245,9 +224,7 @@ namespace TuningTraveler
             _animator.SetFloat(_hashForwardSpeed,_forwardSpeed); 
         }
 
-        /// <summary>
-        /// Jumpの計算
-        /// </summary>
+        /// <summary>Jumpの計算</summary>
         private void CalculateVerticalMovement()
         {
             if (!_charMove.JumpInput && _isGrounded)
@@ -366,9 +343,7 @@ namespace TuningTraveler
             return updateOrientationForLocomotion || updateOrientationForAirborne || updateOrientationForLanding
                    || _inCombo && _inAttack;
         }
-        /// <summary>
-        /// playerの向きを更新する
-        /// </summary>
+        /// <summary>playerの向きを更新する</summary>
         private void UpdateOrientation()
         {
             _animator.SetFloat(_hashAngleDeltaRad,_angleDiff * Mathf.Deg2Rad);
@@ -382,9 +357,7 @@ namespace TuningTraveler
                 _targetRotation, actualTurnSpeed * Time.deltaTime);
             transform.rotation = _targetRotation;
         }
-        /// <summary>
-        /// playerの行動に応じてaudioを再生
-        /// </summary>
+        /// <summary>playerの行動に応じてaudioを再生</summary>
         private void PlayAudio()
         {
             var footfallCurve = _animator.GetFloat(_hashFootFall);
@@ -442,13 +415,11 @@ namespace TuningTraveler
             }
         }
 
-        /// <summary>
-        /// playerが一定時間何も操作しなかった場合にアイドル状態に遷移
-        /// </summary>
+        /// <summary>playerが一定時間何も操作しなかった場合にアイドル状態に遷移</summary>
         private void TimeToIdle()
         {
             var inputDetected = IsMoveInput || _charMove.Attack || _charMove.JumpInput;
-            if (_isGrounded && inputDetected)
+            if (_isGrounded && !inputDetected)
             {
                 _idleTimer += Time.deltaTime;
                 if (_idleTimer >= _idleTimeout)
@@ -463,6 +434,40 @@ namespace TuningTraveler
                 _animator.ResetTrigger(_hashTimeoutToIdle);
             }
             _animator.SetBool(_hashInputDetected,inputDetected);
+        }
+
+        private void OnAnimatorMove()
+        {
+            Vector3 movement;
+            if (_isGrounded)
+            {
+                RaycastHit hit;
+                var ray = new Ray(transform.position + Vector3.up * _groundedRayDistance * 0.5f, -Vector3.up);
+                if (Physics.Raycast(ray, out hit, _groundedRayDistance, Physics.AllLayers,
+                        QueryTriggerInteraction.Ignore))
+                {
+                    movement = Vector3.ProjectOnPlane(_animator.deltaPosition, hit.normal);
+                    var groundRenderer = hit.collider.GetComponentInChildren<Renderer>();
+                    _currentWalkingSurface = groundRenderer ? groundRenderer.sharedMaterial : null;
+                }
+                else
+                {
+                    movement = _animator.deltaPosition;
+                    _currentWalkingSurface = null;
+                }
+            }
+            else
+            {
+                movement = _forwardSpeed * transform.forward * Time.deltaTime;
+            }
+
+            _charCtrl.transform.rotation *= _animator.deltaRotation;
+            movement += _verticalSpeed * Vector3.up * Time.deltaTime;
+            _charCtrl.Move(movement);
+            _isGrounded = _charCtrl.isGrounded;
+            if(!_isGrounded)
+                _animator.SetFloat(_hashAirborneVerticalSpeed,_verticalSpeed);
+            _animator.SetBool(_hashGrounded,_isGrounded);
         }
 
         public void SetCheckPoint(CheckPoint checkPoint)
