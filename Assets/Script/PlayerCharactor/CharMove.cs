@@ -25,8 +25,8 @@ using UnityEngine;
             }
         }
 
-        public bool JumpInput => _jump && !_playerCtrlInputBlocked && _externalInputBlocked;
-        public bool Attack => _attack && !_playerCtrlInputBlocked && _externalInputBlocked;
+        public bool JumpInput => _jump && !_playerCtrlInputBlocked && !_externalInputBlocked;
+        public bool Attack => _attack && !_playerCtrlInputBlocked && !_externalInputBlocked;
         public bool Pause => _pause;
 
         private WaitForSeconds _attackInputWait;

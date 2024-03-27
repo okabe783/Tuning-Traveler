@@ -94,7 +94,7 @@ namespace TuningTraveler
         /// <summary>scriptが初期化されるときに自動で呼び出される</summary>
         private void Reset()
         {
-            _weapon = GetComponent<Weapon>();
+            _weapon = GetComponentInChildren<Weapon>();
             //指定された名前の子を探す
             var footStepSource = transform.Find("FootstepSource");
             //見つかった場合は参照を取得する
@@ -154,8 +154,7 @@ namespace TuningTraveler
             //現在のアニメータの再生時間を0から1の範囲で取得し設定
             _animator.SetFloat(_hashStateTime,
                 Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime,1f));
-            //トリガーをリセット
-            _animator.ResetTrigger(_hashWeaponAttack);
+            _animator.ResetTrigger(_hashWeaponAttack); //トリガーをリセット
             //攻撃アニメーションの再生
             if (_charMove.Attack && _canAttack)
                 _animator.SetTrigger(_hashWeaponAttack);
@@ -254,9 +253,7 @@ namespace TuningTraveler
                 _verticalSpeed -= _gravity * Time.deltaTime;　//空中にいるときの重力
             }
         }
-        /// <summary>
-        /// 向きや回転を制御する
-        /// </summary>
+        /// <summary>向きや回転を制御</summary>
         private void SetTargetRotation()
         {
             // 移動方向、カメラ方向からforwardベクトル、回転の3つの変数を作成する
@@ -267,7 +264,7 @@ namespace TuningTraveler
             forward.Normalize();
             Quaternion targetRotation;
             //localMovementDirectionがplayerの逆向きならplayerをカメラの向きに向ける
-            if (Mathf.Approximately(Vector3.Dot(localMovementDirection, Vector3.forward), -10f))
+            if (Mathf.Approximately(Vector3.Dot(localMovementDirection, Vector3.forward), -1.0f))
             {
                 targetRotation = Quaternion.LookRotation(-forward);
             }
@@ -293,7 +290,7 @@ namespace TuningTraveler
                 var closestForward = Vector3.zero;　//最も近い敵との方向を格納
                 var closest = -1; //最も近い敵のindexを保持
 
-                for (var i = 0; i < count; i++) //周囲の敵を処理
+                for (var i = 0; i < count; ++i) //周囲の敵を処理
                 {
                     //playerから各enemyへの方向ベクトルを計算
                     var playerToEnemy = _overlapResult[i].transform.position - transform.position;
@@ -323,20 +320,18 @@ namespace TuningTraveler
             var angleCurrent = Mathf.Atan2(transform.forward.x, transform.forward.z) * Mathf.Rad2Deg;
             var targetAngle = Mathf.Atan2(resultingForward.x, resultingForward.z) * Mathf.Rad2Deg;
             _angleDiff = Mathf.DeltaAngle(angleCurrent, targetAngle);
-            
             _targetRotation = targetRotation;
         }
         /// <summary>
         /// playerが回転できるかどうかを判定するために毎フレーム呼び出される
         /// </summary>
-        /// <returns></returns>
         private bool IsOrientationUpdated()
         {
-            var updateOrientationForLocomotion = _isAnimatorTransitioning && _currentStateInfo.shortNameHash
+            var updateOrientationForLocomotion = !_isAnimatorTransitioning && _currentStateInfo.shortNameHash
                 == _hashLocomotion || _nextStateInfo.shortNameHash == _hashLocomotion;
-            var updateOrientationForAirborne = _isAnimatorTransitioning && _currentStateInfo.shortNameHash
+            var updateOrientationForAirborne = !_isAnimatorTransitioning && _currentStateInfo.shortNameHash
                 == _hashAirborne || _nextStateInfo.shortNameHash == _hashAirborne;
-            var updateOrientationForLanding = _isAnimatorTransitioning && _currentStateInfo.shortNameHash
+            var updateOrientationForLanding = !_isAnimatorTransitioning && _currentStateInfo.shortNameHash
                 == _hashLanding || _nextStateInfo.shortNameHash == _hashLanding;
 
             //移動中、空中にいる間、着陸中、または攻撃中にプレイヤーの向きを更新する必要があるか
@@ -483,7 +478,7 @@ namespace TuningTraveler
         private IEnumerator RespawnRoutine()
         {
             //アニメーターがDeath状態から遷移するのを待つ
-            while (_currentStateInfo.shortNameHash != _hashDeath || _isAnimatorTransitioning)
+            while (_currentStateInfo.shortNameHash != _hashDeath || !_isAnimatorTransitioning)
             {
                 yield return null;
             }
